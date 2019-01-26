@@ -5,8 +5,16 @@ import (
 	"testing"
 )
 
-func assertFormat(t *testing.T, in string, want string) {
-	got, err := Format([]byte(in))
+func assertFormatJSON(t *testing.T, in string, want string) {
+	assertFormat(t, FormatJSON, in, want)
+}
+
+func assertFormatYAML(t *testing.T, in string, want string) {
+	assertFormat(t, FormatYAML, in, want)
+}
+
+func assertFormat(t *testing.T, formatFunc func([]byte) ([]byte, error), in string, want string) {
+	got, err := formatFunc([]byte(in))
 	if err != nil {
 		t.Errorf("%s", err)
 	}
@@ -16,18 +24,63 @@ func assertFormat(t *testing.T, in string, want string) {
 	}
 }
 
-func TestFormat_Boolean(t *testing.T) {
-	assertFormat(t, "False", "false\n")
-	assertFormat(t, "No", "false\n")
-	assertFormat(t, "True", "true\n")
-	assertFormat(t, "Yes", "true\n")
-	assertFormat(t, "false", "false\n")
-	assertFormat(t, "no", "false\n")
-	assertFormat(t, "true", "true\n")
-	assertFormat(t, "yes", "true\n")
+func TestFormatJSON_Boolean(t *testing.T) {
+	assertFormatJSON(t, "False", "false")
+	assertFormatJSON(t, "No", "false")
+	assertFormatJSON(t, "True", "true")
+	assertFormatJSON(t, "Yes", "true")
+	assertFormatJSON(t, "false", "false")
+	assertFormatJSON(t, "no", "false")
+	assertFormatJSON(t, "true", "true")
+	assertFormatJSON(t, "yes", "true")
 }
 
-func TestFormat_List(t *testing.T) {
+func TestFormatJSON_List(t *testing.T) {
+	var in = `
+[1, 2, 3, 4]
+`
+	var want = strings.Trim(`
+[
+  1,
+  2,
+  3,
+  4
+]
+`, "\n")
+	assertFormatJSON(t, in, want)
+}
+
+func TestFormatJSON_Null(t *testing.T) {
+	assertFormatJSON(t, "null", "null")
+}
+
+func TestFormatJSON_Object(t *testing.T) {
+	var in = `
+{ foo: 1, bar: 2, baz: 3, qux: 4 }
+`
+	var want = strings.Trim(`
+{
+  "bar": 2,
+  "baz": 3,
+  "foo": 1,
+  "qux": 4
+}
+`, "\n")
+	assertFormatJSON(t, in, want)
+}
+
+func TestFormatYAML_Boolean(t *testing.T) {
+	assertFormatYAML(t, "False", "false\n")
+	assertFormatYAML(t, "No", "false\n")
+	assertFormatYAML(t, "True", "true\n")
+	assertFormatYAML(t, "Yes", "true\n")
+	assertFormatYAML(t, "false", "false\n")
+	assertFormatYAML(t, "no", "false\n")
+	assertFormatYAML(t, "true", "true\n")
+	assertFormatYAML(t, "yes", "true\n")
+}
+
+func TestFormatYAML_List(t *testing.T) {
 	var in = `
 [1, 2, 3, 4]
 `
@@ -37,14 +90,14 @@ func TestFormat_List(t *testing.T) {
 - 3
 - 4
 `, "\n")
-	assertFormat(t, in, want)
+	assertFormatYAML(t, in, want)
 }
 
-func TestFormat_Null(t *testing.T) {
-	assertFormat(t, "null", "null\n")
+func TestFormatYAML_Null(t *testing.T) {
+	assertFormatYAML(t, "null", "null\n")
 }
 
-func TestFormat_Object(t *testing.T) {
+func TestFormatYAML_Object(t *testing.T) {
 	var in = `
 { foo: 1, bar: 2, baz: 3, qux: 4 }
 `
@@ -54,10 +107,10 @@ baz: 3
 foo: 1
 qux: 4
 `, "\n")
-	assertFormat(t, in, want)
+	assertFormatYAML(t, in, want)
 }
 
-func TestFormat_String(t *testing.T) {
+func TestFormatYAML_String(t *testing.T) {
 	var in = `
 A: foo
 B: 'foo'
@@ -78,5 +131,5 @@ E: |
   foo
   bar
 `, "\n")
-	assertFormat(t, in, want)
+	assertFormatYAML(t, in, want)
 }
