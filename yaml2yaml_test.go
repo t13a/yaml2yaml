@@ -11,65 +11,49 @@ func assertFormat(t *testing.T, in string, want string) {
 		t.Errorf("%s", err)
 	}
 
-	trimmedWant := strings.TrimLeft(want, "\n")
-	if string(got) != trimmedWant {
-		t.Errorf("Unexpected format string\ngot:\n%s\n\nwant:\n%s", string(got), trimmedWant)
+	if string(got) != want {
+		t.Errorf("Unexpected format string\ngot:\n%s\n\nwant:\n%s", string(got), want)
 	}
 }
 
 func TestFormat_Boolean(t *testing.T) {
-	var in = `
-F:
-- False
-- No
-- false
-- no
-T:
-- True
-- Yes
-- true
-- yes
-`
-	var want = `
-F:
-- false
-- false
-- false
-- false
-T:
-- true
-- true
-- true
-- true
-`
-	assertFormat(t, in, want)
+	assertFormat(t, "False", "false\n")
+	assertFormat(t, "No", "false\n")
+	assertFormat(t, "True", "true\n")
+	assertFormat(t, "Yes", "true\n")
+	assertFormat(t, "false", "false\n")
+	assertFormat(t, "no", "false\n")
+	assertFormat(t, "true", "true\n")
+	assertFormat(t, "yes", "true\n")
 }
 
 func TestFormat_List(t *testing.T) {
 	var in = `
-A: [ 1, 2, 3, 4 ]
+[1, 2, 3, 4]
 `
-	var want = `
-A:
+	var want = strings.TrimLeft(`
 - 1
 - 2
 - 3
 - 4
-`
+`, "\n")
 	assertFormat(t, in, want)
+}
+
+func TestFormat_Null(t *testing.T) {
+	assertFormat(t, "null", "null\n")
 }
 
 func TestFormat_Object(t *testing.T) {
 	var in = `
-A: { foo: 1, bar: 2, baz: 3, qux: 4 }
+{ foo: 1, bar: 2, baz: 3, qux: 4 }
 `
-	var want = `
-A:
-  bar: 2
-  baz: 3
-  foo: 1
-  qux: 4
-`
+	var want = strings.TrimLeft(`
+bar: 2
+baz: 3
+foo: 1
+qux: 4
+`, "\n")
 	assertFormat(t, in, want)
 }
 
@@ -83,7 +67,7 @@ E: |
   foo
   bar
 `
-	var want = `
+	var want = strings.TrimLeft(`
 A: foo
 B: foo
 C: foo
@@ -93,6 +77,6 @@ D: |-
 E: |
   foo
   bar
-`
+`, "\n")
 	assertFormat(t, in, want)
 }

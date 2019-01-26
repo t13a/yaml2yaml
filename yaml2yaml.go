@@ -23,15 +23,10 @@ func main() {
 }
 
 func Format(in []byte) (out []byte, err error) {
-	m := make(map[interface{}]interface{})
+	var m interface{}
 	err = yaml.Unmarshal(in, &m)
 	if err != nil {
-		log.Fatalf("%v", err)
+		return
 	}
-
-	out, err = yaml.Marshal(&m)
-	if err != nil {
-		log.Fatalf("%v", err)
-	}
-	return
+	return yaml.Marshal(&m)
 }
