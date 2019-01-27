@@ -18,7 +18,6 @@ func assertFormat(t *testing.T, formatFunc func([]byte) ([]byte, error), in stri
 	if err != nil {
 		t.Errorf("%s", err)
 	}
-
 	if string(got) != want {
 		t.Errorf("Unexpected format string\ngot:\n%s\n\nwant:\n%s", string(got), want)
 	}

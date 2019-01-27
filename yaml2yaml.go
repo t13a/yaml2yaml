@@ -32,7 +32,7 @@ func main() {
 	fmt.Print(string(out))
 }
 
-func Format(in []byte, jsonOutput bool) (out []byte, err error) {
+func Format(in []byte, jsonOutput bool) ([]byte, error) {
 	if jsonOutput {
 		return FormatJSON(in)
 	} else {
@@ -46,11 +46,11 @@ func FormatJSON(in []byte) (out []byte, err error) {
 	if err != nil {
 		return
 	}
-	out, err = json.MarshalIndent(convert(m), jsonPrefix, jsonIndent)
+	bytes, err := json.MarshalIndent(convertGenericMapToStringMap(m), jsonPrefix, jsonIndent)
 	if err != nil {
 		return
 	}
-	out = []byte(string(out) + "\n")
+	out = []byte(string(bytes) + "\n")
 	return
 }
 
@@ -63,22 +63,22 @@ func FormatYAML(in []byte) (out []byte, err error) {
 	return yaml.Marshal(&m)
 }
 
-func convert(in interface{}) interface{} {
+func convertGenericMapToStringMap(in interface{}) interface{} {
 	switch x := in.(type) {
 	case map[interface{}]interface{}:
 		m2 := map[string]interface{}{}
 		for k, v := range x {
 			switch k2 := k.(type) {
 			case string:
-				m2[k2] = convert(v)
+				m2[k2] = convertGenericMapToStringMap(v)
 			default:
-				m2[k.(string)] = convert(v)
+				m2[k.(string)] = convertGenericMapToStringMap(v)
 			}
 		}
 		return m2
 	case []interface{}:
 		for i, v := range x {
-			x[i] = convert(v)
+			x[i] = convertGenericMapToStringMap(v)
 		}
 	}
 	return in
