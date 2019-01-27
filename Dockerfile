@@ -10,4 +10,4 @@ FROM alpine
 
 COPY --from=builder /yaml2yaml/yaml2yaml /usr/local/bin/yaml2yaml
 
-CMD [ "/usr/local/bin/yaml2yaml" ]
+ENTRYPOINT [ "/usr/local/bin/yaml2yaml" ]
