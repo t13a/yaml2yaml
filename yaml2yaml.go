@@ -46,7 +46,12 @@ func FormatJSON(in []byte) (out []byte, err error) {
 	if err != nil {
 		return
 	}
-	return json.MarshalIndent(convert(m), jsonPrefix, jsonIndent)
+	out, err = json.MarshalIndent(convert(m), jsonPrefix, jsonIndent)
+	if err != nil {
+		return
+	}
+	out = []byte(string(out) + "\n")
+	return
 }
 
 func FormatYAML(in []byte) (out []byte, err error) {

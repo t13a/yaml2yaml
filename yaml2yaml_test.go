@@ -25,21 +25,21 @@ func assertFormat(t *testing.T, formatFunc func([]byte) ([]byte, error), in stri
 }
 
 func TestFormatJSON_Boolean(t *testing.T) {
-	assertFormatJSON(t, "False", "false")
-	assertFormatJSON(t, "No", "false")
-	assertFormatJSON(t, "True", "true")
-	assertFormatJSON(t, "Yes", "true")
-	assertFormatJSON(t, "false", "false")
-	assertFormatJSON(t, "no", "false")
-	assertFormatJSON(t, "true", "true")
-	assertFormatJSON(t, "yes", "true")
+	assertFormatJSON(t, "False", "false\n")
+	assertFormatJSON(t, "No", "false\n")
+	assertFormatJSON(t, "True", "true\n")
+	assertFormatJSON(t, "Yes", "true\n")
+	assertFormatJSON(t, "false", "false\n")
+	assertFormatJSON(t, "no", "false\n")
+	assertFormatJSON(t, "true", "true\n")
+	assertFormatJSON(t, "yes", "true\n")
 }
 
 func TestFormatJSON_List(t *testing.T) {
 	var in = `
 [1, 2, 3, 4]
 `
-	var want = strings.Trim(`
+	var want = strings.TrimLeft(`
 [
   1,
   2,
@@ -51,14 +51,14 @@ func TestFormatJSON_List(t *testing.T) {
 }
 
 func TestFormatJSON_Null(t *testing.T) {
-	assertFormatJSON(t, "null", "null")
+	assertFormatJSON(t, "null", "null\n")
 }
 
 func TestFormatJSON_Object(t *testing.T) {
 	var in = `
 { foo: 1, bar: 2, baz: 3, qux: 4 }
 `
-	var want = strings.Trim(`
+	var want = strings.TrimLeft(`
 {
   "bar": 2,
   "baz": 3,
