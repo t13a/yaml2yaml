@@ -24,14 +24,29 @@ func assertFormat(t *testing.T, formatFunc func([]byte) ([]byte, error), in stri
 }
 
 func TestFormatJSON_Boolean(t *testing.T) {
-	assertFormatJSON(t, "False", "false\n")
-	assertFormatJSON(t, "No", "false\n")
-	assertFormatJSON(t, "True", "true\n")
-	assertFormatJSON(t, "Yes", "true\n")
-	assertFormatJSON(t, "false", "false\n")
-	assertFormatJSON(t, "no", "false\n")
-	assertFormatJSON(t, "true", "true\n")
+	// https://yaml.org/type/bool.html
+	assertFormatJSON(t, "y", "true\n")
+	assertFormatJSON(t, "Y", "true\n")
 	assertFormatJSON(t, "yes", "true\n")
+	assertFormatJSON(t, "Yes", "true\n")
+	assertFormatJSON(t, "YES", "true\n")
+	assertFormatJSON(t, "n", "false\n")
+	assertFormatJSON(t, "N", "false\n")
+	assertFormatJSON(t, "no", "false\n")
+	assertFormatJSON(t, "No", "false\n")
+	assertFormatJSON(t, "NO", "false\n")
+	assertFormatJSON(t, "true", "true\n")
+	assertFormatJSON(t, "True", "true\n")
+	assertFormatJSON(t, "TRUE", "true\n")
+	assertFormatJSON(t, "false", "false\n")
+	assertFormatJSON(t, "False", "false\n")
+	assertFormatJSON(t, "FALSE", "false\n")
+	assertFormatJSON(t, "on", "true\n")
+	assertFormatJSON(t, "On", "true\n")
+	assertFormatJSON(t, "ON", "true\n")
+	assertFormatJSON(t, "off", "false\n")
+	assertFormatJSON(t, "Off", "false\n")
+	assertFormatJSON(t, "OFF", "false\n")
 }
 
 func TestFormatJSON_List(t *testing.T) {
@@ -69,14 +84,29 @@ func TestFormatJSON_Object(t *testing.T) {
 }
 
 func TestFormatYAML_Boolean(t *testing.T) {
-	assertFormatYAML(t, "False", "false\n")
-	assertFormatYAML(t, "No", "false\n")
-	assertFormatYAML(t, "True", "true\n")
-	assertFormatYAML(t, "Yes", "true\n")
-	assertFormatYAML(t, "false", "false\n")
-	assertFormatYAML(t, "no", "false\n")
-	assertFormatYAML(t, "true", "true\n")
+	// https://yaml.org/type/bool.html
+	assertFormatYAML(t, "y", "true\n")
+	assertFormatYAML(t, "Y", "true\n")
 	assertFormatYAML(t, "yes", "true\n")
+	assertFormatYAML(t, "Yes", "true\n")
+	assertFormatYAML(t, "YES", "true\n")
+	assertFormatYAML(t, "n", "false\n")
+	assertFormatYAML(t, "N", "false\n")
+	assertFormatYAML(t, "no", "false\n")
+	assertFormatYAML(t, "No", "false\n")
+	assertFormatYAML(t, "NO", "false\n")
+	assertFormatYAML(t, "true", "true\n")
+	assertFormatYAML(t, "True", "true\n")
+	assertFormatYAML(t, "TRUE", "true\n")
+	assertFormatYAML(t, "false", "false\n")
+	assertFormatYAML(t, "False", "false\n")
+	assertFormatYAML(t, "FALSE", "false\n")
+	assertFormatYAML(t, "on", "true\n")
+	assertFormatYAML(t, "On", "true\n")
+	assertFormatYAML(t, "ON", "true\n")
+	assertFormatYAML(t, "off", "false\n")
+	assertFormatYAML(t, "Off", "false\n")
+	assertFormatYAML(t, "OFF", "false\n")
 }
 
 func TestFormatYAML_List(t *testing.T) {
